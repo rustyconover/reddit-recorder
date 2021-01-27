@@ -13,7 +13,7 @@ import json
 import uuid
 import time
 import boto3
-import zlib
+import gzip
 import datetime
 import argparse
 
@@ -60,7 +60,7 @@ length = 0
 def write_to_s3_if_needed():
     global comments, time_of_last_flush, length
     if length > args.flush_size or (time.time() - time_of_last_flush > args.flush_interval):
-        big = zlib.compress(b"\n".join(comments))
+        big = gzip.compress(b"\n".join(comments))
         time_of_last_flush = time.time()
 
         s3_client = boto3.client('s3')
